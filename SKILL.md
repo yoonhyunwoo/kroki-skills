@@ -310,6 +310,7 @@ Key macros:
 
 ```plantuml
 @startuml
+hide stereotype
 !include <awslib/AWSCommon.puml>
 !include <awslib/General/User.puml>
 !include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer.puml>
@@ -320,10 +321,10 @@ Key macros:
 left to right direction
 
 User(user, "사용자", "접속 주체")
-ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "Ingress")
-ElasticKubernetesService(eks, "EKS", "클러스터")
-RDS(rds, "RDS", "DB")
-SimpleStorageService(s3, "S3", "버킷")
+ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "my-alb")
+ElasticKubernetesService(eks, "EKS", "prod-cluster")
+RDS(rds, "RDS", "app-db")
+SimpleStorageService(s3, "S3", "my-app-assets")
 
 user --> alb
 alb --> eks
@@ -331,6 +332,11 @@ eks --> rds
 eks --> s3
 @enduml
 ```
+
+Macro signature: `{ServiceMacro}(alias, "label", "resource_name")`
+- `alias` — PlantUML internal reference
+- `"label"` — display name shown on diagram
+- `"resource_name"` — actual resource name (e.g. S3 bucket name, EKS cluster name, RDS instance name, ALB DNS name). Always use the real resource identifier, not a generic description.
 
 Key includes:
 - `!include <awslib/AWSCommon.puml>` — base colors, styles (required first)
