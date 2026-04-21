@@ -162,8 +162,12 @@ classDiagram
 ```
 
 ### PlantUML
+
+**IMPORTANT: Always add `hide stereotype` after `@startuml` in every PlantUML diagram.** This removes the `<<stereotype>>` labels from elements for a cleaner look, especially when using icon libraries (k8s, awslib) that attach stereotype annotations.
+
 ```plantuml
 @startuml
+hide stereotype
 Alice -> Bob: Hello
 Bob --> Alice: Hi
 @enduml
@@ -171,6 +175,7 @@ Bob --> Alice: Hi
 
 ```plantuml
 @startuml
+hide stereotype
 class Animal {
   + name: String
   + makeSound()
@@ -305,40 +310,43 @@ Key macros:
 
 ```plantuml
 @startuml
-!include <awslib20/AWSCommon>
-!include <awslib20/Compute/all>
-!include <awslib20/Storage/all>
+!include <awslib/AWSCommon.puml>
+!include <awslib/General/User.puml>
+!include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer.puml>
+!include <awslib/Containers/ElasticKubernetesService.puml>
+!include <awslib/Database/RDS.puml>
+!include <awslib/Storage/SimpleStorageService.puml>
 
-AWSConsole(console, "Management Console", "us-east-1")
-EC2Instance(ec2, "Web Server", "t3.medium")
-S3Bucket(bucket, "Static Assets", "my-bucket")
+left to right direction
 
-console --> ec2 : manage
-ec2 --> bucket : read/write
+User(user, "사용자", "접속 주체")
+ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "Ingress")
+ElasticKubernetesService(eks, "EKS", "클러스터")
+RDS(rds, "RDS", "DB")
+SimpleStorageService(s3, "S3", "버킷")
+
+user --> alb
+alb --> eks
+eks --> rds
+eks --> s3
 @enduml
 ```
 
 Key includes:
-- `!include <awslib20/AWSCommon>` — base colors, styles (required first)
-- `!include <awslib20/{Category}/all>` — load all icons in a category
-- `!include <awslib20/{Category}/{Service}>` — load a single service icon
+- `!include <awslib/AWSCommon.puml>` — base colors, styles (required first)
+- `!include <awslib/{Category}/{Service}.puml>` — load individual service icon
+- Reference: [AWS Icons for PlantUML](https://github.com/awslabs/aws-icons-for-plantuml)
 
-Available categories (use `{Category}/all` or individual service):
-- `Analytics` — Athena, EMR, Glue, Kinesis, Redshift, etc.
-- `ApplicationIntegration` — APIGateway, EventBridge, SQS, SNS, StepFunctions, etc.
+Available categories:
+- `General` — User, etc.
 - `Compute` — EC2, ECS, EKS, Lambda, Fargate, Batch, etc.
-- `Database` — DynamoDB, ElastiCache, RDS, Aurora, DocumentDB, etc.
-- `Networking` — VPC, CloudFront, Route53, ALB, NLB, TransitGateway, etc.
+- `Containers` — ElasticKubernetesService, ElasticContainerService, etc.
+- `Database` — RDS, DynamoDB, ElastiCache, Aurora, DocumentDB, etc.
+- `Storage` — SimpleStorageService, EBS, EFS, FSx, Backup, etc.
+- `NetworkingContentDelivery` — ElasticLoadBalancingApplicationLoadBalancer, CloudFront, Route53, VPC, etc.
 - `Security` — IAM, KMS, WAF, Shield, SecretsManager, etc.
-- `Storage` — S3, EBS, EFS, FSx, Backup, etc.
-
-Key macros:
-- `AWS{Service}(alias, "name", "description")` — generic pattern
-- `EC2Instance(alias, "name", "desc")` — EC2 instance icon
-- `S3Bucket(alias, "name", "desc")` — S3 bucket icon
-- `LambdaFunction(alias, "name", "desc")` — Lambda icon
-- `DynamoDB(alias, "name", "desc")` — DynamoDB table icon
-- `APIGateway(alias, "name", "desc")` — API Gateway icon
+- `ApplicationIntegration` — APIGateway, EventBridge, SQS, SNS, StepFunctions, etc.
+- `Analytics` — Athena, EMR, Glue, Kinesis, Redshift, etc.
 
 ---
 
