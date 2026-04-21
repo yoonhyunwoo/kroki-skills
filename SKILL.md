@@ -266,8 +266,6 @@ Person *--1 Location
 
 PlantUML stdlib provides built-in icon libraries accessible via `!include <lib/...>`. No external URLs needed.
 
-**Layout rule**: Use icon macros standalone by default. Only wrap with `Cluster_Boundary`, `Namespace_Boundary`, or `rectangle` when logically grouping multiple related resources.
-
 #### Kubernetes Icons (`<k8s>`)
 
 ```plantuml
