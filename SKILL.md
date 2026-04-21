@@ -163,10 +163,19 @@ classDiagram
 
 ### PlantUML
 
-**IMPORTANT: Always add `hide stereotype` after `@startuml` in every PlantUML diagram.** This removes the `<<stereotype>>` labels from elements for a cleaner look, especially when using icon libraries (k8s, awslib) that attach stereotype annotations.
+**IMPORTANT: Always add the following after `@startuml` in every PlantUML diagram:**
+
+```plantuml
+skinparam defaultFontName liberation-sans
+hide stereotype
+```
+
+- `skinparam defaultFontName liberation-sans` — force consistent font rendering
+- `hide stereotype` — removes `<<stereotype>>` labels for a cleaner look, especially with icon libraries (k8s, awslib)
 
 ```plantuml
 @startuml
+skinparam defaultFontName liberation-sans
 hide stereotype
 Alice -> Bob: Hello
 Bob --> Alice: Hi
@@ -175,6 +184,7 @@ Bob --> Alice: Hi
 
 ```plantuml
 @startuml
+skinparam defaultFontName liberation-sans
 hide stereotype
 class Animal {
   + name: String
@@ -270,6 +280,7 @@ PlantUML stdlib provides built-in icon libraries accessible via `!include <lib/.
 
 ```plantuml
 @startuml
+skinparam defaultFontName liberation-sans
 hide stereotype
 !include <k8s/Common>
 !include <k8s/Simplified>
@@ -322,6 +333,7 @@ Key macros:
 
 ```plantuml
 @startuml
+skinparam defaultFontName liberation-sans
 hide stereotype
 !include <awslib/AWSCommon.puml>
 !include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer.puml>
