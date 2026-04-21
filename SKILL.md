@@ -270,6 +270,7 @@ PlantUML stdlib provides built-in icon libraries accessible via `!include <lib/.
 
 ```plantuml
 @startuml
+hide stereotype
 !include <k8s/Common>
 !include <k8s/Simplified>
 !include <k8s/OSS/all>
@@ -279,15 +280,26 @@ left to right direction
 actor "User" as user
 Cluster_Boundary(c, "Kubernetes Cluster") {
   Namespace_Boundary(ns, "my-app") {
-    KubernetesSvc(svc, "backend service", "8080/TCP")
-    KubernetesPod(pod, "backend pod", "Spring Boot")
+    KubernetesDeploy(deploy, "backend", "backend-deployment")
+    KubernetesSvc(svc, "backend-svc", "backend-svc")
+    KubernetesPod(pod, "backend-pod", "backend-7d4f8b6c5-x2k9j")
+    KubernetesCM(cm, "app-config", "app-config")
+    KubernetesSecret(secret, "db-creds", "db-credentials")
   }
 }
 
 user --> svc : request
-svc --> pod : route
+svc --> deploy : route
+deploy --> pod : manage
+pod --> cm : read
+pod --> secret : read
 @enduml
 ```
+
+Macro signature: `{Macro}(alias, "label", "resource_name")`
+- `alias` — PlantUML internal reference
+- `"label"` — display name shown on diagram
+- `"resource_name"` — actual Kubernetes resource name (e.g. deployment name, service name, pod name, configmap name). Always use the real resource identifier, not a generic description.
 
 Key includes:
 - `!include <k8s/Common>` — base functions/shared definitions
@@ -297,13 +309,13 @@ Key includes:
 Key macros:
 - `Cluster_Boundary(alias, "label")` — cluster boundary
 - `Namespace_Boundary(alias, "label")` — namespace boundary
-- `KubernetesSvc(alias, "name", "port")` — Service icon
-- `KubernetesPod(alias, "name", "description")` — Pod icon
-- `KubernetesDeploy(alias, "name", "description")` — Deployment icon
-- `KubernetesIng(alias, "name", "description")` — Ingress icon
-- `KubernetesCM(alias, "name", "description")` — ConfigMap icon
-- `KubernetesSecret(alias, "name", "description")` — Secret icon
-- `KubernetesPVC(alias, "name", "description")` — PVC icon
+- `KubernetesSvc(alias, "name", "resource_name")` — Service icon
+- `KubernetesPod(alias, "name", "resource_name")` — Pod icon
+- `KubernetesDeploy(alias, "name", "resource_name")` — Deployment icon
+- `KubernetesIng(alias, "name", "resource_name")` — Ingress icon
+- `KubernetesCM(alias, "name", "resource_name")` — ConfigMap icon
+- `KubernetesSecret(alias, "name", "resource_name")` — Secret icon
+- `KubernetesPVC(alias, "name", "resource_name")` — PVC icon
 - `Rel(from, to, "label")` or `-->` — connections
 
 #### AWS Icons (`<awslib>` / `<awslib20>`)
@@ -312,7 +324,6 @@ Key macros:
 @startuml
 hide stereotype
 !include <awslib/AWSCommon.puml>
-!include <awslib/General/User.puml>
 !include <awslib/NetworkingContentDelivery/ElasticLoadBalancingApplicationLoadBalancer.puml>
 !include <awslib/Containers/ElasticKubernetesService.puml>
 !include <awslib/Database/RDS.puml>
@@ -320,7 +331,7 @@ hide stereotype
 
 left to right direction
 
-User(user, "사용자", "접속 주체")
+actor "사용자" as user
 ElasticLoadBalancingApplicationLoadBalancer(alb, "ALB", "my-alb")
 ElasticKubernetesService(eks, "EKS", "prod-cluster")
 RDS(rds, "RDS", "app-db")
