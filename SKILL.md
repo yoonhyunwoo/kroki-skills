@@ -257,6 +257,89 @@ Person *--1 Location
 }
 ```
 
+### PlantUML Built-in Icon Libraries (stdlib)
+
+PlantUML stdlib provides built-in icon libraries accessible via `!include <lib/...>`. No external URLs needed.
+
+#### Kubernetes Icons (`<k8s>`)
+
+```plantuml
+@startuml
+!include <k8s/Common>
+!include <k8s/Simplified>
+!include <k8s/OSS/all>
+
+left to right direction
+
+actor "User" as user
+Cluster_Boundary(c, "Kubernetes Cluster") {
+  Namespace_Boundary(ns, "my-app") {
+    KubernetesSvc(svc, "backend service", "8080/TCP")
+    KubernetesPod(pod, "backend pod", "Spring Boot")
+  }
+}
+
+user --> svc : request
+svc --> pod : route
+@enduml
+```
+
+Key includes:
+- `!include <k8s/Common>` — base functions/shared definitions
+- `!include <k8s/Simplified>` — simplified (less detailed) icons
+- `!include <k8s/OSS/all>` — all Kubernetes OSS icons
+
+Key macros:
+- `Cluster_Boundary(alias, "label")` — cluster boundary
+- `Namespace_Boundary(alias, "label")` — namespace boundary
+- `KubernetesSvc(alias, "name", "port")` — Service icon
+- `KubernetesPod(alias, "name", "description")` — Pod icon
+- `KubernetesDeploy(alias, "name", "description")` — Deployment icon
+- `KubernetesIng(alias, "name", "description")` — Ingress icon
+- `KubernetesCM(alias, "name", "description")` — ConfigMap icon
+- `KubernetesSecret(alias, "name", "description")` — Secret icon
+- `KubernetesPVC(alias, "name", "description")` — PVC icon
+- `Rel(from, to, "label")` or `-->` — connections
+
+#### AWS Icons (`<awslib>` / `<awslib20>`)
+
+```plantuml
+@startuml
+!include <awslib20/AWSCommon>
+!include <awslib20/Compute/all>
+!include <awslib20/Storage/all>
+
+AWSConsole(console, "Management Console", "us-east-1")
+EC2Instance(ec2, "Web Server", "t3.medium")
+S3Bucket(bucket, "Static Assets", "my-bucket")
+
+console --> ec2 : manage
+ec2 --> bucket : read/write
+@enduml
+```
+
+Key includes:
+- `!include <awslib20/AWSCommon>` — base colors, styles (required first)
+- `!include <awslib20/{Category}/all>` — load all icons in a category
+- `!include <awslib20/{Category}/{Service}>` — load a single service icon
+
+Available categories (use `{Category}/all` or individual service):
+- `Analytics` — Athena, EMR, Glue, Kinesis, Redshift, etc.
+- `ApplicationIntegration` — APIGateway, EventBridge, SQS, SNS, StepFunctions, etc.
+- `Compute` — EC2, ECS, EKS, Lambda, Fargate, Batch, etc.
+- `Database` — DynamoDB, ElastiCache, RDS, Aurora, DocumentDB, etc.
+- `Networking` — VPC, CloudFront, Route53, ALB, NLB, TransitGateway, etc.
+- `Security` — IAM, KMS, WAF, Shield, SecretsManager, etc.
+- `Storage` — S3, EBS, EFS, FSx, Backup, etc.
+
+Key macros:
+- `AWS{Service}(alias, "name", "description")` — generic pattern
+- `EC2Instance(alias, "name", "desc")` — EC2 instance icon
+- `S3Bucket(alias, "name", "desc")` — S3 bucket icon
+- `LambdaFunction(alias, "name", "desc")` — Lambda icon
+- `DynamoDB(alias, "name", "desc")` — DynamoDB table icon
+- `APIGateway(alias, "name", "desc")` — API Gateway icon
+
 ---
 
 ## Diagram Options
